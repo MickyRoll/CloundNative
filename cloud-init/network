@@ -1,0 +1,10 @@
+ net_cfg = {
+                'DEVICE': dev,
+                'NETMASK': info.get('netmask'),
+                'IPADDR': info.get('address'),
+                'BOOTPROTO': info.get('bootproto'),
+                'GATEWAY': info.get('gateway'),
+                'BROADCAST': info.get('broadcast'),
+                'MACADDR': info.get('hwaddress'),
+                'ONBOOT': _make_sysconfig_bool(info.get('auto')),
+            }
