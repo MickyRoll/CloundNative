@@ -1,0 +1,31 @@
+
+Capability：
+instance ID
+host name
+public keys
+authentication certificates (metadata + user data)
+static network configuration addresses
+admin password
+user data
+user content (additional files)
+ability to post passwords
+
+不支持 noCloud!!!
+1）Web API
+   http://169.254.169.254/ 
+  E2C支持的功能比较少  ----instance ID/host name/public keys
+  openstack支持的功能较全面
+   
+
+2）ConfigDrive
+    注入方式：config_drive_cdrom
+            config_drive_raw_hhd
+            config_drive_vfat
+            
+3) cloud--stack
+   http  10.1.1.1
+   
+4) OpenNebula
+
+
+5) Ubuntu MaaS
