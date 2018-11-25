@@ -1,0 +1,91 @@
+ 每种云计算解决方案都有自己的方式提供cloud-init数据源：
+ 
+ 1）E2C ：亚马孙云方式，通过一个magic IP提供服务169.254.168.254
+    1.Meta data: GET http://169.254.169.254/2009-04-04/meta-data/
+      ami-id
+      ami-launch-index
+      ami-manifest-path
+      block-device-mapping/
+      hostname
+      instance-id
+      instance-type
+      local-hostname
+      local-ipv4
+      placement/
+      public-hostname
+      public-ipv4
+      public-keys/
+      reservation-id
+      security-groups
+      
+     2.user data:  GET http://169.254.169.254/2009-04-04/user-data
+                 1234,fred,reboot,true | 4512,jimbo, | 173,,,
+     
+     3.数据源layout， 默认2009-04-04 ??
+     GET http://169.254.169.254/
+          2007-01-19
+          ....
+          2008-09-01
+          2009-04-04
+          ...
+          latest
+          
+                
+    2) Config Drive:  OpenStack模式
+      Version2 local (Virsion1先提供配置网络再从server下载获取数据 net) 必须满足如下要求：
+       1.  vfat或者ios9660格式
+       2.  没有被分区的块设备(/dev/vdb, not /dev/vdb1?????)
+       3,  layout:
+        openstack/
+          - 2012-08-10/ or latest/
+            - meta_data.json
+            - user_data (not mandatory)
+          - content/
+            - 0000 (referenced content files)
+            - 0001
+            - ....
+    
+     3) OpenNebula
+    
+    
+     4) Alt cloud ---- RHEVm vSphere
+         RHEVm/Delta Cloud ----  floppyinject=user-data.txt:<base64 encoded data>
+         % cat simple_script.bash
+          #!/bin/bash
+          echo "Hello Joe!" >> /tmp/JJV_Joe_out.txt
+
+          % base64 < simple_script.bash
+          IyEvYmluL2Jhc2gKZWNobyAiSGVsbG8gSm9lISIgPj4gL3RtcC9KSlZfSm9lX291dC50eHQK
+          
+          VSphere
+             制作数据：% cp simple_scirpt.bash my-iso/user-data.txt
+                      % genisoimage -o user-data.iso -r my-iso
+    
+     5) No Cloud
+         允许用户没有任何网络注入？前面两种也不需要网络
+        1. layout, yaml格式
+         /user-data
+         /meta-data
+        2. label必须是cidata
+    
+       例子：{ echo instance-id: iid-local01; echo local-hostname: cloudimg; } > meta-data
+            $ printf "#cloud-config\npassword: passw0rd\nchpasswd: { expire: False }\nssh_pwauth: True\n" > user-data
+            genisoimage  -output seed.iso -volid cidata -joliet -rock user-data meta-data
+    
+       meta-data注入网络信息：
+          instance-id: iid-abcdefg
+          network-interfaces: |
+            iface eth0 inet static
+            address 192.168.1.10
+            network 192.168.1.0
+            netmask 255.255.255.0
+            broadcast 192.168.1.255
+            gateway 192.168.1.254
+          hostname: myhost
+          
+          
+          
+        6）MAAS
+        
+        
+        7）CloudStack
