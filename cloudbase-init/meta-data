@@ -1,3 +1,11 @@
+instance ID
+host name
+public keys
+authentication certificates (metadata + user data)
+static network configuration addresses
+admin password
+
+
 execample:
 
 {"admin_pass": "Ah2v75Kf9fxW", "availability_zone": "nova", "hostname": "v4.novalocal",}
